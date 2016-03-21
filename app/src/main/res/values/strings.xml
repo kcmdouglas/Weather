@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Weather</string>
+    <string name="background_url">https://source.unsplash.com/category/nature/800x600</string>
 </resources>
