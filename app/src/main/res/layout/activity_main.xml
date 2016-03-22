@@ -30,7 +30,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="78dp"
         android:textSize="40sp"
-        android:textColor="#9c9c9c" />
+        android:textColor="#b0b0b0" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -39,6 +39,7 @@
         android:id="@+id/locationEditText"
         android:layout_above="@+id/locationButton"
         android:layout_centerHorizontal="true"
-        android:hint="Enter Your Zip" />
+        android:hint="Enter Your Zip"
+        android:textColor="#b0b0b0" />
 
 </RelativeLayout>

@@ -2,10 +2,11 @@ package com.epicodus.weather.models;
 import java.util.Date;
 import java.text.DateFormat;
 
-public class ThreeHourBlock {
+public class CurrentWeather {
     private Integer mWeatherId;
     private String mMainDescription;
     private String mLongDescription;
+    private Double mCurrentTemp;
     private Double mTemperatureMin;
     private Double mTemperatureMax;
     private Double mHumidity;
@@ -16,10 +17,11 @@ public class ThreeHourBlock {
     private String mDateWithTime;
 
 
-    public ThreeHourBlock(Integer weatherId, String mainDescription, String longDescription, Double temperatureMin, Double temperatureMax, Double humidity, Integer unconvertedDate, String imageUrl) {
+    public CurrentWeather(Integer weatherId, String mainDescription, String longDescription, Double currentTemp, Double temperatureMin, Double temperatureMax, Double humidity, Integer unconvertedDate, String imageUrl) {
         this.mWeatherId = weatherId;
         this.mMainDescription = mainDescription;
         this.mLongDescription = longDescription;
+        this.mCurrentTemp = currentTemp;
         this.mTemperatureMin = temperatureMin;
         this.mTemperatureMax = temperatureMax;
         this.mHumidity = humidity;
@@ -38,6 +40,10 @@ public class ThreeHourBlock {
 
     public String getLongDescription() {
         return mLongDescription;
+    }
+
+    public Double getCurrentTemp() {
+        return mCurrentTemp;
     }
 
     public Double getTemperatureMin() {
@@ -59,6 +65,8 @@ public class ThreeHourBlock {
         return mConvertedDateFull;
     }
 
-    public String getImageUrl () { return mImageUrl; }
+    public String getImageUrl() {
+        return mImageUrl;
+    }
 
 }

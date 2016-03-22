@@ -3,6 +3,7 @@ package com.epicodus.weather.services;
 import android.content.Context;
 
 import com.epicodus.weather.R;
+import com.epicodus.weather.models.CurrentWeather;
 import com.epicodus.weather.models.ThreeHourBlock;
 
 
@@ -32,12 +33,29 @@ public class CurrentWeatherService {
     }
 
 
-    public void findCurrentWeather(String city, Callback callback) {
+    public void findForecast(String city, Callback callback) {
         String appid = mContext.getString(R.string.weather_API_key);
 
         OkHttpClient client = new OkHttpClient.Builder().build();
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse("http://api.openweathermap.org/data/2.5/forecast?&units=imperial&APPID=" + appid).newBuilder();
+        urlBuilder.addQueryParameter("q", city);
+        String url = urlBuilder.build().toString();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+    }
+
+    public void findCurrentWeather(String city, Callback callback) {
+        String appid = mContext.getString(R.string.weather_API_key);
+
+        OkHttpClient client = new OkHttpClient.Builder().build();
+
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://api.openweathermap.org/data/2.5/weather?&units=imperial&APPID=" + appid).newBuilder();
         urlBuilder.addQueryParameter("q", city);
         String url = urlBuilder.build().toString();
 
@@ -67,8 +85,10 @@ public class CurrentWeatherService {
                     Double tempMax = weatherBlockJSON.getJSONObject("main").getDouble("temp_max");
                     Double humidity = weatherBlockJSON.getJSONObject("main").getDouble("humidity");
                     Integer unconvertedDate = weatherBlockJSON.getInt("dt");
+                    String iconId = weatherBlockJSON.getJSONArray("weather").getJSONObject(0).getString("icon");
+                    String imageUrl = "http://openweathermap.org/img/w/" + iconId + ".png";
 
-                    ThreeHourBlock threeHourBlock = new ThreeHourBlock(weatherId, mainDescription, longDescription, tempMin, tempMax, humidity, unconvertedDate);
+                    ThreeHourBlock threeHourBlock = new ThreeHourBlock(weatherId, mainDescription, longDescription, tempMin, tempMax, humidity, unconvertedDate, imageUrl);
                     threeHourBlocks.add(threeHourBlock);
                 }
             }
@@ -78,6 +98,36 @@ public class CurrentWeatherService {
             e.printStackTrace();
         }
         return threeHourBlocks;
+    }
+
+    public CurrentWeather processCurrentResults(Response response) {
+
+        CurrentWeather currentWeather;
+        currentWeather = null;
+        try {
+            String jsonData = response.body().string();
+            if (response.isSuccessful()) {
+                JSONObject currentWeatherJSON = new JSONObject(jsonData);
+                Integer weatherId = currentWeatherJSON.getJSONArray("weather").getJSONObject(0).getInt("id");
+                String mainDescription = currentWeatherJSON.getJSONArray("weather").getJSONObject(0).getString("main");
+                String longDescription = currentWeatherJSON.getJSONArray("weather").getJSONObject(0).getString("description");
+                Double currentTemp = currentWeatherJSON.getJSONObject("main").getDouble("temp");
+                Double tempMin = currentWeatherJSON.getJSONObject("main").getDouble("temp_min");
+                Double tempMax = currentWeatherJSON.getJSONObject("main").getDouble("temp_max");
+                Double humidity = currentWeatherJSON.getJSONObject("main").getDouble("humidity");
+                Integer unconvertedDate = currentWeatherJSON.getInt("dt");
+                String iconId = currentWeatherJSON.getJSONArray("weather").getJSONObject(0).getString("icon");
+                String imageUrl = "http://openweathermap.org/img/w/" + iconId + ".png";
+
+                currentWeather = new CurrentWeather(weatherId, mainDescription, longDescription, currentTemp, tempMin, tempMax, humidity, unconvertedDate, imageUrl);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return currentWeather;
     }
 
 
