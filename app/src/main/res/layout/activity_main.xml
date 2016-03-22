@@ -35,8 +35,11 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
         android:id="@+id/locationEditText"
         android:layout_above="@+id/locationButton"
         android:layout_centerHorizontal="true"
-        android:hint="Enter Your City" />
+        android:hint="Enter Your Zip" />
+
 </RelativeLayout>
